@@ -1,28 +1,33 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: my-postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}       # Используем переменную DB_USER из .env
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # Используем переменную DB_PASSWORD из .env
+      POSTGRES_DB: ${DB_NAME}          # Используем переменную DB_NAME из .env
     ports:
-      - "5433:5432"
+      - "${DB_PORT}:5432"              # Используем переменную DB_PORT из .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: url-shortener-app
-    ports:
-      - "8080:8080"
+    build: .
+    container_name: app
     depends_on:
       - postgres
-    networks:
-      - app-network
+    env_file:
+      - .env                           # Подключаем .env файл
+    environment:
+      STORAGE_DSN: ${STORAGE_DSN}      # Используем переменную STORAGE_DSN из .env
+      CONFIG_PATH: ${CONFIG_PATH}       # Используем переменную CONFIG_PATH из .env
+      HTTP_ADDR: ${HTTP_ADDR}           # Используем переменную HTTP_ADDR из .env
+      HTTP_TIMEOUT: ${HTTP_TIMEOUT}     # Используем переменную HTTP_TIMEOUT из .env
+      HTTP_IDLE_TIME: ${HTTP_IDLE_TIME} # Используем переменную HTTP_IDLE_TIME из .env
+    ports:
+      - "8080:8080"                     # Пробрасываем порт 8080 на хосте в порт 8080 контейнера
+    volumes:
+      - .:/app                          # Монтируем текущую директорию в /app
 
 volumes:
   postgres_data:
-
-networks:
-  app-network:
