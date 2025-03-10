@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/krekio/urlShortener.git/internal/config"
 	"github.com/krekio/urlShortener.git/internal/storage/postgres"
 	"log/slog"
@@ -22,8 +24,11 @@ func main() {
 		log.Error("error creating storage", err)
 		os.Exit(1)
 	}
-	_ = storage
-
+	router := chi.NewRouter()
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
 }
 
 func setupLogger(env string) *slog.Logger {
