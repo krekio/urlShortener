@@ -3,11 +3,11 @@ services:
     image: postgres:latest
     container_name: postgres
     environment:
-      POSTGRES_USER: ${DB_USER}       # Используем переменную DB_USER из .env
-      POSTGRES_PASSWORD: ${DB_PASSWORD} # Используем переменную DB_PASSWORD из .env
-      POSTGRES_DB: ${DB_NAME}          # Используем переменную DB_NAME из .env
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "${DB_PORT}:5432"              # Используем переменную DB_PORT из .env
+      - "${DB_PORT}:5432" #?
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -17,17 +17,17 @@ services:
     depends_on:
       - postgres
     env_file:
-      - .env                           # Подключаем .env файл
+      - .env
     environment:
-      STORAGE_DSN: ${STORAGE_DSN}      # Используем переменную STORAGE_DSN из .env
-      CONFIG_PATH: ${CONFIG_PATH}       # Используем переменную CONFIG_PATH из .env
-      HTTP_ADDR: ${HTTP_ADDR}           # Используем переменную HTTP_ADDR из .env
-      HTTP_TIMEOUT: ${HTTP_TIMEOUT}     # Используем переменную HTTP_TIMEOUT из .env
-      HTTP_IDLE_TIME: ${HTTP_IDLE_TIME} # Используем переменную HTTP_IDLE_TIME из .env
+      STORAGE_DSN: ${STORAGE_DSN}
+      CONFIG_PATH: ${CONFIG_PATH}
+      HTTP_ADDR: ${HTTP_ADDR}
+      HTTP_TIMEOUT: ${HTTP_TIMEOUT}
+      HTTP_IDLE_TIME: ${HTTP_IDLE_TIME}
     ports:
-      - "8080:8080"                     # Пробрасываем порт 8080 на хосте в порт 8080 контейнера
+      - "8080:8080"
     volumes:
-      - .:/app                          # Монтируем текущую директорию в /app
+      - .:/app
 
 volumes:
   postgres_data:

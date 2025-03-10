@@ -10,7 +10,7 @@ import (
 type Config struct {
 	Env        string `env:"ENV" envDefault:"local"`
 	StorageDsn string `env:"STORAGE_DSN" env-required:"true"`
-	ConfigPath string `env:"CONFIG_PATH" envDefault:"./.env"`
+	ConfigPath string `env:"CONFIG_PATH" envDefault:"./.env" env-required:"true"`
 }
 
 type HTTPServer struct {
